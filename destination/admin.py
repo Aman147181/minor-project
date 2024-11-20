@@ -1,20 +1,48 @@
 from django.contrib import admin
-from .models import Mf_result, Places,Place_rating,Destimages,Hotel,Comment
+from unfold.admin import ModelAdmin  # Use Unfold's ModelAdmin
+from .models import Places, Place_rating, Comment, Destimages, Mf_result
 
-class PlaceAdmin(admin.ModelAdmin):
-    search_fields = ['name']
+@admin.register(Places)
+class PlacesAdmin(ModelAdmin):
+    list_display = ('name', 'address', 'ispopular', 'rateinfo')
+    search_fields = ('name', 'address')
+    list_filter = ('ispopular',)
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'address', 'descrption', 'ispopular')
+        }),
+        ('Image', {
+            'fields': ('thumbnail_image',),
+        }),
+        ('Rate Info', {
+            'fields': ('rateinfo',),
+        }),
+    )
 
-class mfadmin(admin.ModelAdmin):
-    search_fields = ['place__name', 'user__username']
+@admin.register(Place_rating)
+class PlaceRatingAdmin(ModelAdmin):
+    list_display = ('place', 'user', 'rate')
+    list_filter = ('rate',)
+    search_fields = ('place__name', 'user__username')
 
-class placeratesearch(admin.ModelAdmin):
-    search_fields = ['user__username']
+@admin.register(Comment)
+class CommentAdmin(ModelAdmin):
+    list_display = ('place', 'user', 'created_date')
+    list_filter = ('created_date',)
+    search_fields = ('place__name', 'user__username', 'comment_body')
 
-admin.site.register(Places,PlaceAdmin)
-admin.site.register(Place_rating, placeratesearch)
-admin.site.register(Destimages)
-admin.site.register(Hotel)
-admin.site.register(Comment)
-admin.site.register(Mf_result,mfadmin)
+@admin.register(Destimages)
+class DestimagesAdmin(ModelAdmin):
+    list_display = ('place',)
+    search_fields = ('place__name',)
+    fieldsets = (
+        (None, {
+            'fields': ('place', 'image'),
+        }),
+    )
 
-
+@admin.register(Mf_result)
+class MfResultAdmin(ModelAdmin):
+    list_display = ('place', 'user', 'rate')
+    search_fields = ('place__name', 'user__username')
+    list_filter = ('rate',)

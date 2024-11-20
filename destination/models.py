@@ -1,13 +1,9 @@
 
 from django.urls import reverse 
 from django.db import models
-import datetime
 from django.contrib.auth.models import User
 from ratinghome.models import Rateinfo 
-from django.utils import timezone
 import os
-
-
 
 def content_file_name(instance, filename):
     ext = filename.split('.')[-1]
@@ -61,17 +57,6 @@ class Destimages(models.Model):
         return self.place.name
 
 
-
-class Hotel(models.Model):
-    title=models.CharField(max_length=20)
-    contact_info=models.CharField(max_length=15)
-    nearby=models.ForeignKey(Places,on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.nearby.name
-
-
-
 class Mf_result(models.Model):
     rate=models.FloatField() 
     place=models.ForeignKey(Places,on_delete=models.CASCADE)
@@ -79,13 +64,3 @@ class Mf_result(models.Model):
     def __str__(self):
         return "%s-%s" % (self.user.username,self.place.name)
    
-
-
-
-
-        
-
-
-
-
-

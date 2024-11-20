@@ -35,7 +35,7 @@ def hybrid_recommender(thisuser):
   
         df_preference = pd.DataFrame(list(prset),columns=["user","culture","wildlife","adventure","sightseeing","history","religious","child_friendly"] )
     
-        df_preference = df_preference.drop('user',1)
+        df_preference = df_preference.drop('user',axis=1)
         df_preference = df_preference.astype(int)
         preference = df_preference.values.tolist()[0]
         def Similarity(preference, placeId):
